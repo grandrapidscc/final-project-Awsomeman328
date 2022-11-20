@@ -20,5 +20,10 @@ namespace CIS129FinalProject
         {
             _potionType = potionType;
         }
+
+        public override void Update()
+        {
+
+        }
     }
 }

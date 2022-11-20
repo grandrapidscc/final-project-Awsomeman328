@@ -46,7 +46,7 @@ using System.Globalization;
  * TODO: Whenever the Wizert expends any MP, display how much MP was used
  * TODO: When the Wizert's HP becomes 0 or less, the player is defeated and it is game over
  * TODO (Optional): Make a State Machine for the Player Character's Behaivor. 
- *  ^Move, Search, Battle, AttemptExit, UsePowerup, Exit, Die^
+ *  ^Spawn, Move, Search, Battle, AttemptExit, UsePowerup, Exit, Die^
  * 
  * 
  * DONE: Create the Enemy Subclass from the GameUnit Class
@@ -176,6 +176,8 @@ do
                 theDungeon[0, 4].Add(new Powerup(Powerup.PotionTypes.Magika));
                 theDungeon[4, 0].Add(new Powerup(Powerup.PotionTypes.Health));
             }
+            theDungeon[0, 4].Add(ProgramHelper.SpawnRandomEnemy(rnd));
+            theDungeon[4, 0].Add(ProgramHelper.SpawnRandomEnemy(rnd));
             break;
 
         case 1:
@@ -193,6 +195,8 @@ do
                 theDungeon[0, 0].Add(new Powerup(Powerup.PotionTypes.Magika));
                 theDungeon[4, 4].Add(new Powerup(Powerup.PotionTypes.Health));
             }
+            theDungeon[0, 0].Add(ProgramHelper.SpawnRandomEnemy(rnd));
+            theDungeon[4, 4].Add(ProgramHelper.SpawnRandomEnemy(rnd));
             break;
 
         case 2:
@@ -210,6 +214,8 @@ do
                 theDungeon[0, 0].Add(new Powerup(Powerup.PotionTypes.Magika));
                 theDungeon[4, 4].Add(new Powerup(Powerup.PotionTypes.Health));
             }
+            theDungeon[0, 0].Add(ProgramHelper.SpawnRandomEnemy(rnd));
+            theDungeon[4, 4].Add(ProgramHelper.SpawnRandomEnemy(rnd));
             break;
 
         case 3:
@@ -227,6 +233,8 @@ do
                 theDungeon[0, 4].Add(new Powerup(Powerup.PotionTypes.Magika));
                 theDungeon[4, 0].Add(new Powerup(Powerup.PotionTypes.Health));
             }
+            theDungeon[0, 4].Add(ProgramHelper.SpawnRandomEnemy(rnd));
+            theDungeon[4, 0].Add(ProgramHelper.SpawnRandomEnemy(rnd));
             break;
 
         default:
@@ -235,38 +243,35 @@ do
     }
     foreach (var item in theDungeon)
     {
-        if (item.Count() == 1)
+        if (item.Count() == 1) item.Add(ProgramHelper.SpawnRandomEnemy(rnd));
+    }
+
+    gameOver = false;
+    while (!gameOver)
+    {
+        foreach (var item in theDungeon)
         {
-            randInt = rnd.Next(3);
-            switch (randInt)
+            // This is such an ugly solution to find the Wizert in my Array of Lists, but it works so I'll ignore it for now, ...
+            foreach (Wizert wizert in item)
             {
-                case 0:
-                    item.Add(new EnemyGoblin());
-                    break;
-
-                case 1:
-                    item.Add(new EnemyOrc());
-                    break;
-
-                case 2:
-                    item.Add(new EnemyBanshee());
-                    break;
-
-                default:
-                    Console.WriteLine("A critical error has occured {spawning the enemies}");
-                    break;
+                if (wizert != null)
+                {
+                    wizert.Update();
+                    // If the Wizert either escapes or dies, the game is over
+                    if (wizert.GetState() == Wizert.WizertState.Exit || wizert.GetState() == Wizert.WizertState.Die)
+                    {
+                        // Need to run the Update 1 more time in order to properly display the correct game over message(s)
+                        wizert.Update();
+                        gameOver = true;
+                    }
+                }
             }
         }
     }
 
-    do
-    {
-        gameOver = true;
-    } while (!gameOver);
-
     Console.WriteLine("Would you like to play the game again? Press...\r" +
-        "\n8.\tYes\r" +
-        "\n9.\tNo\r");
+        "\n1.\tYes\r" +
+        "\n2.\tNo\r");
     input = Console.ReadLine();
     if (string.IsNullOrEmpty(input))
     {
@@ -274,62 +279,22 @@ do
     }
     else
     {
-        if (!(char.TryParse(input, out char _1)))
-        {
-            Console.WriteLine("Invalid input detected: <Must be a single digit number>. Please try again");
-        }
-        else if (!(int.TryParse(input, out int _2)))
-        {
-            Console.WriteLine("Invalid input detected: <Must be a number>. Please try again");
-        }
-        else
+        if (ProgramHelper.ValidateUserInput(input))
         {
             // Check which number 0-9 was entered
             switch (input)
             {
-                case "0":
-                    Console.WriteLine("0 doesn't do anything, dummy! hahaha");
-                    break;
-
                 case "1":
-                    Console.WriteLine("You try to go North.");
-                    break;
-
-                case "2":
-                    Console.WriteLine("You try to go South.");
-                    break;
-
-                case "3":
-                    Console.WriteLine("You try to go East.");
-                    break;
-
-                case "4":
-                    Console.WriteLine("You try to go West.");
-                    break;
-
-                case "5":
-                    Console.WriteLine("You try to attack with your Fireball spell.");
-                    break;
-
-                case "6":
-                    Console.WriteLine("You try to go Heal yourself with your Magicka.");
-                    break;
-
-                case "7":
-                    Console.WriteLine("You try to Flee back from where you came from.");
-                    break;
-
-                case "8":
                     Console.WriteLine("Yes, you would like to Continue Playing.");
                     break;
 
-                case "9":
+                case "2":
                     Console.WriteLine("No, you would not like to Continue Playing.");
                     continuePlaying = false;
                     break;
 
                 default:
-                    Console.WriteLine("Something must have gone wrong: <Selecting 0-9>. Please try again");
+                    Console.WriteLine("Please choose a valid, single digit number from what is listed.");
                     break;
             }
         }

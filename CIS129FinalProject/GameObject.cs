@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace CIS129FinalProject
 {
-    public class GameObject
+    public abstract class GameObject
     {
-
+        public abstract void Update();
+        
     }
 }

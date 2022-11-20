@@ -18,5 +18,10 @@ namespace CIS129FinalProject
             if (_hp > _maxHp) _hp = _maxHp;
             if (_hp < 0) _hp = 0;
         }
+
+        public override void Update()
+        {
+
+        }
     }
 }

@@ -16,5 +16,10 @@ namespace CIS129FinalProject
             _isExit = isExit;
             _description = "You are in a room, and this is a test string to make sure that everything is working as intended.";
         }
+
+        public override void Update()
+        {
+
+        }
     }
 }
