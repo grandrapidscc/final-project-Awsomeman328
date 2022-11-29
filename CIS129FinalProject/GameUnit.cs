@@ -11,6 +11,9 @@ namespace CIS129FinalProject
         protected int _hp;
         protected int _maxHp;
 
+        public int GetHP() { return _hp; }
+        public int GetMaxHP() { return _maxHp; }
+
         // A positive amount is healing, a negative amount is damage.
         public void AdjustHP(int amount)
         {

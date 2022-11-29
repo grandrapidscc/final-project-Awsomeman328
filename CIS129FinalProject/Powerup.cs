@@ -8,15 +8,15 @@ namespace CIS129FinalProject
 {
     public class Powerup : GameObject
     {
-        protected PotionTypes _potionType;
+        protected PotionType _potionType;
 
-        public enum PotionTypes
+        public enum PotionType
         {
             Health,
             Magika
         }
 
-        public Powerup(PotionTypes potionType)
+        public Powerup(PotionType potionType)
         {
             _potionType = potionType;
         }
@@ -25,5 +25,7 @@ namespace CIS129FinalProject
         {
 
         }
+
+        public PotionType GetPotionType() { return _potionType; }
     }
 }

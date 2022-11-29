@@ -23,7 +23,7 @@ namespace CIS129FinalProject
             else return true;
         }
 
-        public static Enemy SpawnRandomEnemy(Random rnd)
+        public static Enemy? SpawnRandomEnemy(Random rnd)
         {
             int randInt = rnd.Next(3);
             switch (randInt)

@@ -21,5 +21,8 @@ namespace CIS129FinalProject
         {
 
         }
+
+        public bool IsExit() { return _isExit; }
+        public string GetDescription() { return _description; }
     }
 }

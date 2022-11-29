@@ -20,7 +20,8 @@ namespace CIS129FinalProject
             Exit,
             Die
         }
-        protected WizertState state;
+        protected WizertState currentState;
+        protected WizertState nextState;
 
         public Wizert()
         {
@@ -28,59 +29,34 @@ namespace CIS129FinalProject
             _hp = _maxHp;
             _maxMp = 200;
             _mp = _maxMp;
-            state = WizertState.Spawn;
+            currentState = WizertState.Spawn;
         }
 
         public override void Update()
         {
-            switch (state)
-            {
-                // The starting state for when the Wizert first spawns in.
-                case WizertState.Spawn:
-                    Console.WriteLine("You, the Wizert, have found yourself within the Dungeon yet again, ...");
-                    state = WizertState.Search;
-                    break;
-                
-                // The Wizert deciding which direction to move to.
-                case WizertState.Move:
-
-                    break;
-                
-                // The Wizert searching through the room to see what's here (most states are connected to this one).
-                case WizertState.Search:
-
-                    break;
-                
-                // The Wizert is battling an Enemy.
-                case WizertState.Battle:
-
-                    break;
-                
-                // The Wizert consumes a Powerup when there is one and no Enemies are present.
-                case WizertState.UsePowerup:
-
-                    break;
-                
-                // The Wizert got to the Exit Room with no Enemies in it and wins!
-                case WizertState.Exit:
-
-                    break;
-               
-                // The Wizert's HP reaches 0 or less and losses.
-                case WizertState.Die:
-
-                    break;
-               
-                // If somehow we get an invalid Wizert State
-                default:
-                    Console.WriteLine("A critical error has occured {Wizert State}");
-                    break;
-            }
+            if (nextState != currentState) currentState = nextState;
         }
 
         public WizertState GetState()
         {
-            return state;
+            return currentState;
+        }
+
+        public void SetNextState(WizertState inState)
+        {
+            nextState = inState;
+        }
+
+        
+
+        public int GetMP() { return _mp; }
+        public int GetMaxMP() { return _maxMp; }
+
+        public void AdjustMP(int amount)
+        {
+            _mp += amount;
+            if (_mp > _maxMp) _mp = _maxMp;
+            if (_mp < 0) _mp = 0;
         }
     }
 }
