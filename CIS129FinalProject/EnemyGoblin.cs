@@ -11,6 +11,7 @@ namespace CIS129FinalProject
         public EnemyGoblin()
         {
             _enemyName = "Goblin";
+            _unitName = _enemyName;
             _maxHp = 3;
             _hp = _maxHp;
             _attackName = "Body Slam";

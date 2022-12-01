@@ -27,6 +27,7 @@ namespace CIS129FinalProject
         {
             _maxHp = 100;
             _hp = _maxHp;
+            _unitName = "Wizert";
             _maxMp = 200;
             _mp = _maxMp;
             currentState = WizertState.Spawn;
@@ -57,6 +58,20 @@ namespace CIS129FinalProject
             _mp += amount;
             if (_mp > _maxMp) _mp = _maxMp;
             if (_mp < 0) _mp = 0;
+            if (amount > 0)
+            {
+                Console.WriteLine($"The {GetUnitName()} has restored {amount} MP.");
+            }
+            else if (amount < 0)
+            {
+                Console.WriteLine($"The {GetUnitName()} has expended {-amount} MP.");
+            }
+            else
+            {
+                Console.WriteLine("... It appears to not have had any effect.");
+
+            }
+            Console.WriteLine($"The {GetUnitName()}'s current MP is now {_mp} out of {_maxMp}");
         }
     }
 }

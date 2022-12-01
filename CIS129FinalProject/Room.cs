@@ -11,10 +11,10 @@ namespace CIS129FinalProject
         protected bool _isExit;
         protected string _description;
 
-        public Room(bool isExit)
+        public Room(bool isExit, string desc)
         {
             _isExit = isExit;
-            _description = "You are in a room, and this is a test string to make sure that everything is working as intended.";
+            _description = desc;
         }
 
         public override void Update()

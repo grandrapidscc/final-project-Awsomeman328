@@ -17,8 +17,7 @@ using static CIS129FinalProject.Wizert;
  * DONE: Spawn any number of Powerups, only 1 in each room ("The number of Powerups is at my discretion.")
  *  ^Spawn 2 Powerups, one of each type, to two opposite corners of the Dungeon (not the Wizert's corner)^
  * DONE: Implament the Dungeon's Outer Walls
- * 
- * TODO: Create various descriptions for the rooms of the Dungeon to display after the Wizert enters that room (About 25 of them)
+ * DONE: Create various descriptions for the rooms of the Dungeon to display after the Wizert enters that room (About 25 of them)
  * 
  * 
  * Game Objects
@@ -29,46 +28,39 @@ using static CIS129FinalProject.Wizert;
  * DONE: Create the GameUnit Subclass from the GameObject Class
  * DONE: Define the Health Point (HP) and MaxHP Variables
  * DONE: Define the AdjustHealth Function to implament taking damage and healing
- * 
- * TODO: Whenever a Unit's health is adjusted, display what the difference is and how much remaining health it has left
+ * DONE: Whenever a Unit's health is adjusted, display what the difference is and how much remaining health it has left
  *      ^Do this within the actual AdjustHP and AdjustMP functions, maybe ...^
  * 
  * 
  * DONE: Create the Wizert Subclass, the player controlled character, from the GameUnit Class
  * DONE: Implement the Wizert's starting Health Points (100 HP) and Magicka Points (200 MP)
  * DONE: Create the Wizert's movement options (North, South, East, West) EXCEPT for when there is a wall in the way
- * 
- * TODO: Create the Wizert's combat options (Fireball, Heal, or Flee) EXCEPT for when the Wizert does not have enough MP to use certain certain actions
- *  ^I think it would be a cool idea to also allow the user to heal themselves during their movement outside of an encounter^
- * TODO: Implement the Flee Action (B/c it is supposed to be a random chance of either succeding or failing to flee, I'll just make it a 50/50 chance)
- *  ^A successful Flee should bring the Wizert back into the direction from which they came from, aka always going back to the same room that it used to enter^
- * TODO: Implement providing a description of what happens whenever the user chooses an action to perform
- * TODO: Whenever the Wizert expends any MP, display how much MP was used
- * TODO: When the Wizert's HP becomes 0 or less, the player is defeated and it is game over
- * TODO (Optional): Make a State Machine for the Player Character's Behaivor. 
- *  ^Spawn, Move, Search, Battle, AttemptExit, UsePowerup, Exit, Die^
+ * DONE: Create the Wizert's combat options (Fireball, Heal, or Flee) EXCEPT for when the Wizert does not have enough MP to use certain certain actions
+ *      ^I think it would be a cool idea to also allow the user to heal themselves during their movement outside of an encounter^
+ * DONE: Implement the Flee Action (B/c it is supposed to be a random chance of either succeding or failing to flee, I'll just make it a 50/50 chance)
+ *      ^A successful Flee should bring the Wizert back into the direction from which they came from, aka always going back to the same room that it used to enter^
+ * DONE: Implement providing a description of what happens whenever the user chooses an action to perform
+ * DONE: Whenever the Wizert expends any MP, display how much MP was used
+ * DONE: When the Wizert's HP becomes 0 or less, the player is defeated and it is game over
  * 
  * 
  * DONE: Create the Enemy Subclass from the GameUnit Class
  * DONE: Create the various enemy Subclasses from the Enemy Class
- * 
- * TODO: When an enemy attacks, show a message that says the name of the attack, how much damage it did, and how much HP the Wizert has left
- * TODO: Once an enemy's HP hits 0 or less, the enemy is defeated and should be despawned from the room
- * TODO: If the Wizert flees the room and then returns, the same enemy should still be there and should have the same amount of health (no healing enemies)
+ * DONE: When an enemy attacks, show a message that says the name of the attack, how much damage it did, and how much HP the Wizert has left
+ * DONE: Once an enemy's HP hits 0 or less, the enemy is defeated and should be despawned from the room
+ * DONE: If the Wizert flees the room and then returns, the same enemy should still be there and should have the same amount of health (no healing enemies)
  * 
  * 
  * DONE: Create the Powerup Subclass from the GameObject Class
  * DONE: Create the various powerup Subclasses from the Powerup Class
- * 
- * TODO: If the Wizert enters a room with a Powerup, then they immedeately consume the Powerup with a message displayed of the effects.
+ * DONE: If the Wizert enters a room with a Powerup, then they immedeately consume the Powerup with a message displayed of the effects.
  *  ^If the Wizert encounters a Powerup while their respective HP or MP is already at max, then the Powerup is not consumed and will remain in that room until consumed^
  *  ^Also if there is an Enemy in the same room as a Powerup, then the Powerup is not consumed until the Enemy in that room is defeated.^
- * TODO: Once a Powerup is used, it needs to be despawned from the Dungeon with a message displaying how much HP or MP was restored and the Wizert's new current HP or MP
+ * DONE: Once a Powerup is used, it needs to be despawned from the Dungeon with a message displaying how much HP or MP was restored and the Wizert's new current HP or MP
  * 
  * Game Logic
  * DONE: When the player is "Game Overed," ask if they would like to play again. If so, restart the program. If not, exit program.
- * 
- * TODO: If the Wizert enters a room with both an Enemy and a Powerup, then the Powerup is not consumed until the Enemy in that room is defeated
+ * DONE: If the Wizert enters a room with both an Enemy and a Powerup, then the Powerup is not consumed until the Enemy in that room is defeated
  * 
  * User Input
  * DONE: Whenever we need to ask for user input, we will display a list of possible options, each with a corrisponding number next to the option
@@ -90,9 +82,9 @@ using static CIS129FinalProject.Wizert;
  * DONE: Input Validation
  * DONE: Instatiating your Classes into Objects
  * DONE: Conditional Statements (IF and/or Switch)
+ * DONE: Appropriate Opperators
  * 
  * TODO: Any External Libraries
- * TODO: Appropriate Opperators
  * TODO: Encapsulation (Each Class is its own file & Do not put all of the funtionality into a single file)
  * 
  * 
@@ -162,17 +154,19 @@ List<GameObject>[][] theDungeon2 = new List<GameObject>[5][]
 Random rnd = new();
 int randInt;
 string? input;
-bool firstTime = true;
-bool gameOver = false;
+bool firstTime;
+bool gameOver;
 bool continuePlaying = true;
 List<GameObject>[,] theDungeon;
 Wizert wizert = new();
-Room room = new(false);
-Enemy? enemy = new();
+Room room = new(false, "The room is hard to see in the current light. You take a moment for your eyes to adjust to the darkness.");
+Enemy? enemy;
 Powerup powerup = new(Powerup.PotionType.Health);
 (int, int) prevRoom = (0, 0);
 (int, int) exitRoom = (0, 0);
 (int, int) currentRoom = (0, 0);
+List<(int, int, GameObject)> gameObjectsToRemove = new() { };
+List<string> roomDescriptions;
 
 /* Ok, new plan for spawning everything:
  * 1) Pick a random number 1, 2, 3, or 4. The chosen number will detrmine which corner the exit is spawned in. 
@@ -205,13 +199,49 @@ do
                 new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }
             }
         };
+    roomDescriptions = new List<string>
+        {
+            "You are in a room illuminated by torches.  It reeks of orc, though you do not see any nearby.",
+            "Withered corpses are nailed to the corridor walls.",
+            "Skeletons hang from chains and manacles against the walls.",
+            "Several square holes are cut into the walls here.",
+            "A narrow shaft falls into the center from above.",
+            "A metallic odor fills the room.",
+            "A scratching sound fills the room.",
+            "A chute falls into the room from above.",
+            "Numerous pillars line the room.",
+            "Ghostly music fills the room.",
+            "Upon a glancing look the room appears to be empty.",
+            "A stream of water flows along a channel in the floor. Someone has scrawled \"The thief will betray you\" on the north wall.",
+            "A well lies in the north-east corner of the room. A sundered & shattered helm lies in the south-west corner of the room.",
+            "The walls are covered with cracks. A rusted chain shirt lies in the south-west corner of the room.",
+            "A chute descends from the room into a pitch-black void below. Someone has scrawled \"You cannot kill it with wizardry\" in dwarvish runes on the east wall.",
+            "Several iron cages are scattered throughout the room. Someone has scrawled an arcane symbol on the south wall.",
+            "A faded and torn tapestry hangs from the north wal. Someone has scrawled \"Praise Illfang the Kobold Lord\" in orcish runes on the south wall.",
+            "A stream of oil flows along a channel in the floor. A torn satchel lies in the north side of the room.",
+            "A shallow pit lies in the north side of the room. The floor is covered in square tiles, alternating white and black.",
+            "A tile mosaic of a legendary battle covers the floor. Someone has scrawled \"They ate Thainarv\" on the south wall.",
+            "Someone has scrawled \"Abandon all hope\" on the west wall. A sour odor fills the room.",
+            "An iron cauldron and round table sit in the south-west corner of the room. Someone has scrawled \"Three steps forward, six steps back\" on the east wall.",
+            "A splashing noise can be faintly heard near the east wall. A pile of rotten fruit lies in the south-west corner of the room.",
+            "A narrow ledge runs along the north and east walls. Spirals of blue stones cover the floor.",
+            "Numerous pillars line the walls. Someone has scrawled \"Breder's Shields looted this place\" on the east wall.",
+            "The room is hard to see in the current light. You take a moment for your eyes to adjust to the darkness."
+        };
     randInt = rnd.Next(4);
     switch (randInt)
     {
         case 0:
-            theDungeon[0, 0].Add(new Room(true));
+            randInt = rnd.Next(roomDescriptions.Count);
+            theDungeon[0, 0].Add(new Room(true, roomDescriptions[randInt]));
+            roomDescriptions.RemoveAt(randInt);
             exitRoom = (0, 0);
-            foreach (var item in theDungeon) if (item.Count == 0) item.Add(new Room(false));
+            foreach (var item in theDungeon) if (item.Count == 0)
+                {
+                    randInt = rnd.Next(roomDescriptions.Count);
+                    item.Add(new Room(false, roomDescriptions[randInt]));
+                    roomDescriptions.RemoveAt(randInt);
+                }
             //theDungeon[4, 4].Add(new Wizert());
             currentRoom = (4, 4);
             prevRoom = (4, 4);
@@ -240,9 +270,16 @@ do
             break;
 
         case 1:
-            theDungeon[0, 4].Add(new Room(true));
+            randInt = rnd.Next(roomDescriptions.Count);
+            theDungeon[0, 4].Add(new Room(true, roomDescriptions[randInt]));
+            roomDescriptions.RemoveAt(randInt);
             exitRoom = (0, 4);
-            foreach (var item in theDungeon) if (item.Count == 0) item.Add(new Room(false));
+            foreach (var item in theDungeon) if (item.Count == 0)
+                {
+                    randInt = rnd.Next(roomDescriptions.Count);
+                    item.Add(new Room(false, roomDescriptions[randInt]));
+                    roomDescriptions.RemoveAt(randInt);
+                }
             //theDungeon[4, 0].Add(new Wizert());
             currentRoom = (4, 0);
             prevRoom = (4, 0);
@@ -271,9 +308,16 @@ do
             break;
 
         case 2:
-            theDungeon[4, 0].Add(new Room(true));
+            randInt = rnd.Next(roomDescriptions.Count);
+            theDungeon[4, 0].Add(new Room(true, roomDescriptions[randInt]));
+            roomDescriptions.RemoveAt(randInt);
             exitRoom = (4, 0);
-            foreach (var item in theDungeon) if (item.Count == 0) item.Add(new Room(false));
+            foreach (var item in theDungeon) if (item.Count == 0)
+                {
+                    randInt = rnd.Next(roomDescriptions.Count);
+                    item.Add(new Room(false, roomDescriptions[randInt]));
+                    roomDescriptions.RemoveAt(randInt);
+                }
             //theDungeon[0, 4].Add(new Wizert());
             currentRoom = (0, 4);
             prevRoom = (0, 4);
@@ -302,9 +346,16 @@ do
             break;
 
         case 3:
-            theDungeon[4, 4].Add(new Room(true));
+            randInt = rnd.Next(roomDescriptions.Count);
+            theDungeon[4, 4].Add(new Room(true, roomDescriptions[randInt]));
+            roomDescriptions.RemoveAt(randInt);
             exitRoom = (4, 4);
-            foreach (var item in theDungeon) if (item.Count == 0) item.Add(new Room(false));
+            foreach (var item in theDungeon) if (item.Count == 0)
+                {
+                    randInt = rnd.Next(roomDescriptions.Count);
+                    item.Add(new Room(false, roomDescriptions[randInt]));
+                    roomDescriptions.RemoveAt(randInt);
+                }
             //theDungeon[0, 0].Add(new Wizert());
             currentRoom = (0, 0);
             prevRoom = (0, 0);
@@ -349,6 +400,15 @@ do
                 wizert.SetNextState(WizertState.Spawn);
                 firstTime = false;
             }
+            if (gameObjectsToRemove.Count > 0)
+            {
+                foreach (var item in gameObjectsToRemove)
+                {
+                    theDungeon[item.Item1, item.Item2].Remove(item.Item3);
+                }
+                gameObjectsToRemove = new List<(int, int, GameObject)> { };
+            }
+
             wizert.Update();
             switch (wizert.GetState())
             {
@@ -365,6 +425,7 @@ do
                         "\n4.\tTo go west\r" +
                         "\n5.\tTo heal yourself");
                     input = Console.ReadLine();
+                    Console.WriteLine();
                     if (string.IsNullOrEmpty(input))
                     {
                         Console.WriteLine("Invalid input detected: <Null Or Empty>. Please try again");
@@ -452,10 +513,10 @@ do
                                     }
                                     else if (wizert.GetMP() >= 5)
                                     {
-                                        Console.WriteLine("You cast a spell to heal your wounds. You regain 3 HP using 5 MP.");
+                                        Console.WriteLine("You cast a spell to heal your wounds.");
                                         wizert.AdjustMP(-5);
                                         wizert.AdjustHP(3);
-                                        Console.WriteLine($"You now have {wizert.GetHP()} HP and {wizert.GetMP} MP.");
+                                        Console.WriteLine($"You now have {wizert.GetHP()} HP and {wizert.GetMP()} MP.");
                                     }
                                     else
                                     {
@@ -473,7 +534,18 @@ do
                     break;
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 case Wizert.WizertState.Search:
-                    Console.WriteLine("You are in a room illuminated by torches.  It reeks of orc, though you do not see any nearby.");
+                    foreach (GameObject testRoom in theDungeon[currentRoom.Item1, currentRoom.Item2])
+                    {
+                        if (Room.ReferenceEquals(testRoom.GetType(), room.GetType()))
+                        {
+                            if (testRoom != null)
+                            {
+                                room = (Room)testRoom;
+                                Console.WriteLine($"{room.GetDescription()}");
+                            }
+                        }
+                    }
+                    
                     wizert.SetNextState(Wizert.WizertState.Move);
                     foreach (GameObject testPowerup in theDungeon[currentRoom.Item1, currentRoom.Item2])
                     {
@@ -529,6 +601,7 @@ do
                                     "\n2.\tTo Heal yourself\r" +
                                     "\n3.\tTo Attempt to Flee\r");
                                 input = Console.ReadLine();
+                                Console.WriteLine();
                                 if (string.IsNullOrEmpty(input))
                                 {
                                     Console.WriteLine("Invalid input detected: <Null Or Empty>. Please try again");
@@ -544,10 +617,10 @@ do
                                                 if (wizert.GetMP() >= 3)
                                                 {
                                                     // Still need to check if the wizert has enough MP to be able to cast any of its spell options, ...
-                                                    Console.WriteLine("You cast a fireball that burns the enemy. It costed 3 MP and does 5 damage.");
+                                                    Console.WriteLine("You cast a fireball that burns the enemy.");
                                                     wizert.AdjustMP(-3);
                                                     enemy.AdjustHP(-5);
-                                                    Console.WriteLine($"The {enemy.GetEnemyName()} now has {enemy.GetHP()} HP.");
+                                                    //Console.WriteLine($"The {enemy.GetEnemyName()} now has {enemy.GetHP()} HP.");
                                                 }
                                                 else
                                                 {
@@ -558,15 +631,17 @@ do
                                                 if (enemy.GetHP() <= 0)
                                                 {
                                                     Console.WriteLine($"The {enemy.GetEnemyName()} burns to a crisp.");
-                                                    theDungeon[currentRoom.Item1, currentRoom.Item2].Remove(enemy);
+                                                    gameObjectsToRemove.Add((currentRoom.Item1, currentRoom.Item2, enemy));
+                                                    //theDungeon[currentRoom.Item1, currentRoom.Item2].Remove(enemy); 
+                                                    // ^^^Removing an item from the collection that you're looping through will cause a runtime error.
                                                     wizert.SetNextState(WizertState.Search);
                                                 }
                                                 else
                                                 {
                                                     Console.Write($"The {enemy.GetEnemyName()} uses it's {enemy.GetAttackName()} attack. ");
-                                                    Console.WriteLine($"It deals {enemy.GetAttackDamage()} damage");
+                                                    //Console.WriteLine($"It deals {enemy.GetAttackDamage()} damage");
                                                     wizert.AdjustHP(-enemy.GetAttackDamage());
-                                                    Console.WriteLine($"You have {wizert.GetHP()} HP left.");
+                                                    //Console.WriteLine($"You have {wizert.GetHP()} HP left.");
                                                 }
 
                                                 if (wizert.GetHP() <= 0)
@@ -584,10 +659,10 @@ do
                                                 }
                                                 else if (wizert.GetMP() >= 5)
                                                 {
-                                                    Console.WriteLine("You cast a spell to heal your wounds. You regain 3 HP using 5 MP.");
+                                                    Console.WriteLine("You cast a spell to heal your wounds.");
                                                     wizert.AdjustMP(-5);
                                                     wizert.AdjustHP(3);
-                                                    Console.WriteLine($"You now have {wizert.GetHP()} HP and {wizert.GetMP} MP.");
+                                                    Console.WriteLine($"You now have {wizert.GetHP()} HP and {wizert.GetMP()} MP.");
                                                 }
                                                 else
                                                 {
@@ -596,9 +671,9 @@ do
                                                 }
 
                                                 Console.Write($"The {enemy.GetEnemyName()} uses it's {enemy.GetAttackName()} attack. ");
-                                                Console.WriteLine($"It deals {enemy.GetAttackDamage()} damage");
+                                                //Console.WriteLine($"It deals {enemy.GetAttackDamage()} damage");
                                                 wizert.AdjustHP(-enemy.GetAttackDamage());
-                                                Console.WriteLine($"You have {wizert.GetHP()} HP left.");
+                                                //Console.WriteLine($"You have {wizert.GetHP()} HP left.");
 
                                                 if (wizert.GetHP() <= 0)
                                                 {
@@ -615,9 +690,9 @@ do
                                                     // Did not escape
                                                     Console.WriteLine("You did not successfully escape from the battle.");
                                                     Console.Write($"The {enemy.GetEnemyName()} uses it's {enemy.GetAttackName()} attack. ");
-                                                    Console.WriteLine($"It deals {enemy.GetAttackDamage()} damage");
+                                                    //Console.WriteLine($"It deals {enemy.GetAttackDamage()} damage");
                                                     wizert.AdjustHP(-enemy.GetAttackDamage());
-                                                    Console.WriteLine($"You have {wizert.GetHP()} HP left.");
+                                                    //Console.WriteLine($"You have {wizert.GetHP()} HP left.");
                                                     if (wizert.GetHP() <= 0)
                                                     {
                                                         Console.WriteLine("You have ran out of HP.");
@@ -631,7 +706,9 @@ do
                                                     // Move back to your previous location, ...
                                                     wizert.SetNextState(WizertState.Search);
                                                     theDungeon[prevRoom.Item1, prevRoom.Item2].Add(wizert);
-                                                    theDungeon[currentRoom.Item1, currentRoom.Item2].Remove(wizert);
+                                                    gameObjectsToRemove.Add((currentRoom.Item1, currentRoom.Item2, wizert));
+                                                    //theDungeon[currentRoom.Item1, currentRoom.Item2].Remove(wizert);
+                                                    // ^^^Removing an item from the collection that you're looping through will cause a runtime error.
                                                     (int, int) _temp = prevRoom;
                                                     prevRoom = (currentRoom.Item1, currentRoom.Item2);
                                                     currentRoom = _temp;
@@ -670,7 +747,9 @@ do
                                     {
                                         Console.WriteLine("You choose to take the potion now since you need it.");
                                         wizert.AdjustHP(10);
-                                        theDungeon[currentRoom.Item1, currentRoom.Item2].Remove(powerup);
+                                        gameObjectsToRemove.Add((currentRoom.Item1, currentRoom.Item2, powerup));
+                                        //theDungeon[currentRoom.Item1, currentRoom.Item2].Remove(powerup);
+                                        // ^^^Removing an item from the collection that you're looping through will cause a runtime error.
                                     }
                                 }
                                 else
@@ -684,7 +763,9 @@ do
                                     {
                                         Console.WriteLine("You choose to take the potion now since you need it.");
                                         wizert.AdjustMP(20);
-                                        theDungeon[currentRoom.Item1, currentRoom.Item2].Remove(powerup);
+                                        gameObjectsToRemove.Add((currentRoom.Item1, currentRoom.Item2, powerup));
+                                        //theDungeon[currentRoom.Item1, currentRoom.Item2].Remove(powerup);
+                                        // ^^^Removing an item from the collection that you're looping through will cause a runtime error.
                                     }
                                 }
                             }
@@ -713,14 +794,15 @@ do
                     Console.WriteLine("A critical error has occured {Wizert State}");
                     break;
             }
+            Console.WriteLine("");
         }
-
     }
 
     Console.WriteLine("Would you like to play the game again? Press...\r" +
         "\n1.\tYes\r" +
         "\n2.\tNo\r");
     input = Console.ReadLine();
+    Console.WriteLine();
     if (string.IsNullOrEmpty(input))
     {
         Console.WriteLine("Invalid input detected: <Null Or Empty>. Please try again");
