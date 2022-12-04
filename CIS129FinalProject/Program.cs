@@ -1,10 +1,13 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using CIS129FinalProject;
+using System;
+using System.Diagnostics.Metrics;
+using System.Net;
 using static CIS129FinalProject.Wizert;
 
 /* TODO and DONE List:
  * 
- * TODO: This NEEDS to be a text-based adventure game, no fansey graphical interfaces. (booo!)
+ * DONE: This NEEDS to be a text-based adventure game, no fansey graphical interfaces. (booo!)
  * 
  * TODO: The Player will take control of the Wizert
  * TODO: The Wizert uses Magicka to attack his Enemies
@@ -140,43 +143,9 @@ using static CIS129FinalProject.Wizert;
  *      normally I would default back to week 10's lesson about user input and validation which would be to go with the nice option, keep asking until the user gets it right.
  *      That said, I do kinda want to do it the mean way, but I think it would be better to do it the nice way just in case that is a requirement and I missed it.
  * 
- */
-
-/* How the Program loop and Game loop will function
- * - Reset the Game
- * - Spawn everything in a Random Pattern
- * - Start the Game loop
- * - The Wizert will start by searching in any room it finds itself in.
- * - It i's search, it will report to the player a meaningless description and if there is a Powerup, Exit, &/or Enemy in that room.
- * - If any of these things are found, the Wizert will address each of them in reverse order. 
- * - If none of these things are present, the game will ask the player which direction they want to move, North, South, East, or West.
- *      > After moving, the Wizert will start searching this new room.
- *      > Alternatively to moving, the player may also opt to not move for now and heal themselves.
- * - If there is an Enemy in the room:
- *      > The player gets the choice of either attacking that Enemy, Healing themselves, or trying to run away.
- *      > If they choose to Attack, then the Wizert expends some MP and damages the Enemy.
- *          >If after this the Enemy's HP is set to 0 or less, the Enemy dies and is deleted.
- *          >Once the Enemy is deleted, the Wizert will go back to searching the room.
- *      > If they choose to Heal, then the Wizert expends some MP and restores some of the Wizert's HP.
- *      > If they choose to Flee, then the Wizert has a 50% chance of sucessfully fleeing back to the previous room that they came in from.
- *      > If they fail this 50% chance, then a notification informing them of this failure occurs.
- *      > If after this choice the Wizert is still in the same room with an Enemy still remaining, then the Enemy attacks the Wizert and damages them.
- *      > If the Wizert's HP is brought down to 0 or less, then the Wizert Dies.
- *      > If the Wizert did not die, then repeat this battle loop.
- * - If the Exit is in the room:
- *      > Then the Wizert Exits the Dungeon.
- * - If there is a Powerup in the room:
- *      > If the Wizert's stat for the powerup is already at its max value then it won't use the Powerup.
- *      > Otherwise, the Wizert will consume the Powerup, restoring that particular stat by a bit and deleting the Powerup.
- *      > After this, the Wizert will decide where they want to move.
- *          >Insead of having them search the room again, it would be simplier to have them to straight into moving.
- * - If at any point the Wizert's HP reaches 0 or less:
- *      > Then the Wizert Dies.
- * - Once the Wizert either Exits the Dungeon or Dies, it is Game Over!
- * - Once it is Game Over, we will leave the game loop.
- * - After leaving the Game loop, the program will ask if the player would like to play again.
- * - If yes then the Program will return back to "Reset the Game"
- * - If no, then the Program will terminate.
+ * ??? When the Wizert successuflly flees from a battle, in what direction do they flee in? The README doesn't describe this at all, they just say they "Flee" ...
+ *      This could mean that the Wizert would then be able to move however they want, however to me I imagine that trying to "Flee" would involve trying to get back to 
+ *      known safety, as in where they originally came from. As such, if the Wizert succeeds in fleeing, then they just go back to the room that they were previously in.
  * 
  */
 
@@ -186,9 +155,9 @@ string? input;
 bool firstTime;
 bool gameOver;
 bool continuePlaying = true;
-List<GameObject>[,] theDungeon;
+Room[,] theDungeon;
 Wizert wizert = new();
-Room room = new(false, "The room is hard to see in the current light. You take a moment for your eyes to adjust to the darkness.");
+Room room = new(false);
 Enemy? enemy;
 Powerup powerup = new(Powerup.PotionType.Health);
 (int, int) prevRoom = (0, 0);
@@ -214,22 +183,23 @@ List<string> roomDescriptions;
 
 do
 {
-    theDungeon = new List<GameObject>[5, 5]
+    //- Reset the Game
+    theDungeon = new Room[5, 5]
         {
             {
-                new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }
+                new Room(false), new Room(false), new Room(false), new Room(false), new Room(false)
             },
             {
-                new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }
+                new Room(false), new Room(false), new Room(false), new Room(false), new Room(false)
             },
             {
-                new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }
+                new Room(false), new Room(false), new Room(false), new Room(false), new Room(false)
             },
             {
-                new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }
+                new Room(false), new Room(false), new Room(false), new Room(false), new Room(false)
             },
             {
-                new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }
+                new Room(false), new Room(false), new Room(false), new Room(false), new Room(false)
             }
         };
     roomDescriptions = new List<string>
@@ -261,12 +231,14 @@ do
             "Numerous pillars line the walls. Someone has scrawled \"Breder's Shields looted this place\" on the east wall.",
             "The room is hard to see in the current light. You take a moment for your eyes to adjust to the darkness."
         };
+    //-Spawn everything in according to their own logic
     randInt = rnd.Next(4);
     switch (randInt)
     {
         case 0:
             randInt = rnd.Next(roomDescriptions.Count);
-            theDungeon[0, 0].Add(new Room(true, roomDescriptions[randInt]));
+            theDungeon[0, 0].SetExit(true);
+            theDungeon[0, 0].SetDescription(roomDescriptions[randInt]);
             roomDescriptions.RemoveAt(randInt);
             exitRoom = (0, 0);
             foreach (var item in theDungeon) if (item.Count == 0)
@@ -423,6 +395,7 @@ do
     gameOver = false;
     firstTime = true;
 
+    //- Start the Game loop
     while (!gameOver)
     {
         if (wizert != null)
@@ -449,7 +422,8 @@ do
                     Console.WriteLine("You, the Wizert, have found yourself within the Dungeon yet again, ...");
                     wizert.SetNextState(Wizert.WizertState.Search);
                     break;
-                //////////////////////////////////////////////////////////////////////////////////////////////////
+                
+                //- Once in the Move state, the game will ask the player which direction they want to move, North, South, East, or West.
                 case Wizert.WizertState.Move:
                     Console.WriteLine("Press..." +
                         "\n1.\tTo go north\r" +
@@ -478,6 +452,7 @@ do
                                     }
                                     else
                                     {
+                                        //> After moving, the Wizert will start searching this new room.
                                         Console.WriteLine("and you go through the door.");
                                         wizert.SetNextState(WizertState.Search);
                                         theDungeon[currentRoom.Item1 - 1, currentRoom.Item2].Add(wizert);
@@ -495,6 +470,7 @@ do
                                     }
                                     else
                                     {
+                                        //> After moving, the Wizert will start searching this new room.
                                         Console.WriteLine("and you go through the door.");
                                         wizert.SetNextState(WizertState.Search);
                                         theDungeon[currentRoom.Item1 + 1, currentRoom.Item2].Add(wizert);
@@ -512,6 +488,7 @@ do
                                     }
                                     else
                                     {
+                                        //> After moving, the Wizert will start searching this new room.
                                         Console.WriteLine("and you go through the door.");
                                         wizert.SetNextState(WizertState.Search);
                                         theDungeon[currentRoom.Item1, currentRoom.Item2 + 1].Add(wizert);
@@ -529,6 +506,7 @@ do
                                     }
                                     else
                                     {
+                                        //> After moving, the Wizert will start searching this new room.
                                         Console.WriteLine("and you go through the door.");
                                         wizert.SetNextState(WizertState.Search);
                                         theDungeon[currentRoom.Item1, currentRoom.Item2 - 1].Add(wizert);
@@ -538,6 +516,7 @@ do
                                     }
                                     break;
 
+                                //> Alternatively to moving, the player may also opt to not move for now and to heal themselves.
                                 case "5":
                                     if (wizert.GetHP() >= wizert.GetMaxHP())
                                     {
@@ -565,8 +544,10 @@ do
                         }
                     }
                     break;
-                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                //- The Wizert will start its behaivor by searching whenever he finds himself in a new room
                 case Wizert.WizertState.Search:
+                    //- First the Wizert will report to the player a meaningless but colorful description of the room.
                     foreach (GameObject testRoom in theDungeon[currentRoom.Item1, currentRoom.Item2])
                     {
                         if (Room.ReferenceEquals(testRoom.GetType(), room.GetType()))
@@ -578,8 +559,10 @@ do
                             }
                         }
                     }
-                    
+                    //- It its search, the Game will report to the player if there is a Powerup, an Exit, &/or an Enemy in the room.
+                    //- If none of these things are present, the Wizert will go to its Move state
                     wizert.SetNextState(Wizert.WizertState.Move);
+                    //- If any of these things are found, the Wizert will address each of them in reverse order.
                     foreach (GameObject testPowerup in theDungeon[currentRoom.Item1, currentRoom.Item2])
                     {
                         if (Powerup.ReferenceEquals(testPowerup.GetType(), powerup.GetType()))
@@ -614,7 +597,8 @@ do
                         }
                     }
                     break;
-                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                //- If we've gotten to this state, then there is an Enemy in the room!
                 case Wizert.WizertState.Battle:
                     // We might not need this anymore, ... idk yet
                     //wizert.Update();
@@ -626,6 +610,7 @@ do
                         {
                             if (currentEnemy != null)
                             {
+                                //> The player gets the choice of either attacking that Enemy, Healing themselves, or trying to run away.
                                 enemy = (Enemy)currentEnemy;
                                 Console.WriteLine($"You have encountered a {enemy.GetEnemyName()}."); // currently doesn't account for "an orc".
                                 Console.WriteLine($"It's current HP is {enemy.GetHP()}.");
@@ -646,6 +631,7 @@ do
                                         // Check which number 0-9 was entered
                                         switch (input)
                                         {
+                                            //> If they choose to Attack, then the Wizert expends some MP and damages the Enemy.
                                             case "1":
                                                 if (wizert.GetMP() >= 3)
                                                 {
@@ -663,20 +649,25 @@ do
 
                                                 if (enemy.GetHP() <= 0)
                                                 {
+                                                    //> If after attacking the Enemy's HP is set to 0 or less, the Enemy dies and is deleted.
                                                     Console.WriteLine($"The {enemy.GetEnemyName()} burns to a crisp.");
                                                     gameObjectsToRemove.Add((currentRoom.Item1, currentRoom.Item2, enemy));
                                                     //theDungeon[currentRoom.Item1, currentRoom.Item2].Remove(enemy); 
                                                     // ^^^Removing an item from the collection that you're looping through will cause a runtime error.
+                                                    //>Once the Enemy is deleted, the Wizert will go back to searching the room.
                                                     wizert.SetNextState(WizertState.Search);
                                                 }
                                                 else
                                                 {
+                                                    //> If after this choice the Wizert is still in the same room with an Enemy still remaining,
+                                                    //  then the Enemy attacks the Wizert and damages them.
                                                     Console.Write($"The {enemy.GetEnemyName()} uses it's {enemy.GetAttackName()} attack. ");
                                                     //Console.WriteLine($"It deals {enemy.GetAttackDamage()} damage");
                                                     wizert.AdjustHP(-enemy.GetAttackDamage());
                                                     //Console.WriteLine($"You have {wizert.GetHP()} HP left.");
                                                 }
 
+                                                //> If the Wizert's HP is brought down to 0 or less, then the Wizert Dies.
                                                 if (wizert.GetHP() <= 0)
                                                 {
                                                     Console.WriteLine("You have ran out of HP.");
@@ -684,6 +675,7 @@ do
                                                 }
                                                 break;
 
+                                            //> If they choose to Heal, then the Wizert expends some MP and restores some of the Wizert's HP.
                                             case "2":
                                                 if (wizert.GetHP() >= wizert.GetMaxHP())
                                                 {
@@ -703,11 +695,14 @@ do
                                                     Console.WriteLine($"You currently have {wizert.GetMP()} MP left.");
                                                 }
 
+                                                //> If after this choice the Wizert is still in the same room with an Enemy still remaining,
+                                                //  then the Enemy attacks the Wizert and damages them.
                                                 Console.Write($"The {enemy.GetEnemyName()} uses it's {enemy.GetAttackName()} attack. ");
                                                 //Console.WriteLine($"It deals {enemy.GetAttackDamage()} damage");
                                                 wizert.AdjustHP(-enemy.GetAttackDamage());
                                                 //Console.WriteLine($"You have {wizert.GetHP()} HP left.");
 
+                                                //> If the Wizert's HP is brought down to 0 or less, then the Wizert Dies.
                                                 if (wizert.GetHP() <= 0)
                                                 {
                                                     Console.WriteLine("You have ran out of HP.");
@@ -715,17 +710,21 @@ do
                                                 }
                                                 break;
 
+                                            //> If they choose to Flee, then the Wizert has a 50% chance of sucessfully fleeing back to the previous room that they came in from.
                                             case "3":
                                                 Console.WriteLine("You attempt to flee from the battle.");
                                                 randInt = rnd.Next(2);
                                                 if (randInt == 0)
                                                 {
-                                                    // Did not escape
+                                                    //> If they fail this 50% chance, then a notification informing them of this failure occurs.
                                                     Console.WriteLine("You did not successfully escape from the battle.");
+                                                    //> If after this choice the Wizert is still in the same room with an Enemy still remaining,
+                                                    //  then the Enemy attacks the Wizert and damages them.
                                                     Console.Write($"The {enemy.GetEnemyName()} uses it's {enemy.GetAttackName()} attack. ");
                                                     //Console.WriteLine($"It deals {enemy.GetAttackDamage()} damage");
                                                     wizert.AdjustHP(-enemy.GetAttackDamage());
                                                     //Console.WriteLine($"You have {wizert.GetHP()} HP left.");
+                                                    //> If the Wizert's HP is brought down to 0 or less, then the Wizert Dies.
                                                     if (wizert.GetHP() <= 0)
                                                     {
                                                         Console.WriteLine("You have ran out of HP.");
@@ -734,7 +733,7 @@ do
                                                 }
                                                 else
                                                 {
-                                                    // Did escape
+                                                    //> If they win this 50% chance, then a notification informing them of thier success occurs.
                                                     Console.WriteLine("You successfully escaped from the battle.");
                                                     // Move back to your previous location, ...
                                                     wizert.SetNextState(WizertState.Search);
@@ -759,7 +758,8 @@ do
                         }
                     }
                     break;
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                //- If there is a Powerup in the room but no Exit and no Enemy, then we move to this state
                 case Wizert.WizertState.UsePowerup:
                     foreach (GameObject currentPowerup in theDungeon[currentRoom.Item1, currentRoom.Item2])
                     {
@@ -767,6 +767,8 @@ do
                         {
                             if (currentPowerup != null)
                             {
+                                //> If the Wizert's stat for the powerup is already at its max value then it won't use the Powerup.
+                                //  Otherwise, the Wizert will consume the Powerup, restoring that particular stat by a bit and deleting the Powerup.
                                 powerup = (Powerup)currentPowerup;
                                 Console.WriteLine("You look closer to examine the potion.");
                                 if (powerup.GetPotionType() == Powerup.PotionType.Health)
@@ -804,22 +806,28 @@ do
                             }
                         }
                     }
+                    //> After this, the Wizert will decide where they want to move.
+                    //  Insead of having them search the room again, it is simplier to have them go straight into moving.
                     wizert.SetNextState(WizertState.Move);
                     break;
-                ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                //- If the Exit is in the room, then the Wizert Exits the Dungeon and the player wins!
                 case Wizert.WizertState.Exit:
                     // Need to run the Update 1 more time in order to properly display the correct game over message(s)
                     // We might not need this anymore, ... idk yet
                     //wizert.Update();
                     Console.WriteLine("And with that, you finally touch the exit and you are whisked out of the dungeon.");
+                    //- Once the Wizert either Exits the Dungeon or Dies, it is Game Over!
                     gameOver = true;
                     break;
-                ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                //- If at any point the Wizert's HP reaches 0 or less, then the Wizert Dies and the player loses.
                 case Wizert.WizertState.Die:
                     // Need to run the Update 1 more time in order to properly display the correct game over message(s)
                     // We might not need this anymore, ... idk yet
                     //wizert.Update();
                     Console.WriteLine("And with that, you take your last breath as you finally meet your end.");
+                    //- Once the Wizert either Exits the Dungeon or Dies, it is Game Over!
                     gameOver = true;
                     break;
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -829,8 +837,9 @@ do
             }
             Console.WriteLine("");
         }
+        //- Once it is Game Over, we will leave the game loop.
     }
-
+    //- After leaving the Game loop, the program will ask if the player would like to play again.
     Console.WriteLine("Would you like to play the game again? Press...\r" +
         "\n1.\tYes\r" +
         "\n2.\tNo\r");
@@ -847,10 +856,12 @@ do
             // Check which number 0-9 was entered
             switch (input)
             {
+                //- If yes then the Program will return back to "Reset the Game"
                 case "1":
                     Console.WriteLine("Yes, you would like to Continue Playing.");
                     break;
 
+                //-If no, then the Program will terminate.
                 case "2":
                     Console.WriteLine("No, you would not like to Continue Playing.");
                     continuePlaying = false;
