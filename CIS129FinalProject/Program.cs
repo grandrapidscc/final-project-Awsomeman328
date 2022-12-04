@@ -1,95 +1,144 @@
 ﻿// See https://aka.ms/new-console-template for more information
-//Console.WriteLine("Hello, World!");
 using CIS129FinalProject;
 using static CIS129FinalProject.Wizert;
 
-/* TODO LIST:
+/* TODO and DONE List:
  * 
- * DONE: Create this TODO List
+ * TODO: This NEEDS to be a text-based adventure game, no fansey graphical interfaces. (booo!)
  * 
- * Dungeon
- * DONE: Create the Dungeon, a 5x5xN 3-dimentional grid that will be populated by various GameObject Class Objects.
- * DONE: Spawn the Wizert into a random room in the Dungeon (one of the 4 corners)
- * DONE: Spawn the Dugeon Exit into a different random room in the Dungeon (Preferably on both a different row and column)
- * DONE: Spawn at least 13 enemies, only 1 in any room (One in every room that's on both a different row and column)
- *  ^IDK why the instructions say that encountering these should not be by chance when typically these objects' positions in the grid would be ^
- *  ^randomly generated at the start of the game. But whatever, the professor wants these to have predictable spawn locations.^
- * DONE: Spawn any number of Powerups, only 1 in each room ("The number of Powerups is at my discretion.")
- *  ^Spawn 2 Powerups, one of each type, to two opposite corners of the Dungeon (not the Wizert's corner)^
- * DONE: Implament the Dungeon's Outer Walls
- * DONE: Create various descriptions for the rooms of the Dungeon to display after the Wizert enters that room (About 25 of them)
+ * TODO: The Player will take control of the Wizert
+ * TODO: The Wizert uses Magicka to attack his Enemies
+ * TODO: There is a Dungeon and the Wizert is caught inside it
+ * TODO: The Wizert must Fight his way out of the Dungeon in order to not Die
+ * TODO: If the Wizert manages to escape from the Dungeon, the Player Wins
+ * TODO: The Wizert can move in four directions: North, South, East, & West
+ * TODO: The Game needs to keep track of the Wizert's current location
+ * TODO: The Wizert's current location is not information avalible to the player
+ * TODO: After the Wizert Moves, he could encounter an Enemy
+ * TODO: Durring an Enemy encounter, the Wizert has three options to choose from: Fireball, Heal, & Flee
+ * TODO: The Fireball Attack has the listed description from the README, costs the Wizert 3 MP, and does 5 Damage to the Enemy
+ * TODO: The Heal Option/Action has the listed description from the README, costs the Wizert 5 MP, and Heals 3 Heath Points (HP) to the Wizert
+ * TODO: The Flee Option/Action has the listed description from the README, costs the Wizert 0 MP, and has a chance of allowing the Wizert to escape from the current Encounter
+ * TODO: When an Action is performed, a description of what is happening should be displayed
+ * TODO: When using an Action, the amount of MP consumed and the effects of the Action should be displayed.
+ * TODO: When an Enemy takes an Attack from the Wizert, a display of the Enemy's new current HP should be displayed.
+ * TODO: At the start of the game, the Wizert starts with 100 Health Points (HP) and 100 Magicka Points (MP).
+ * TODO: If the Wizert's HP is depleted to 0 before escaping the Dungeon, it is Game Over (Bad Ending)
+ * TODO: A message indicating that "The Wizert has lost" should be displayed to the console.
+ * TODO: Once the Game is over, there should be an offer to play the Game again
+ * 
+ * TODO: There are three kinds/types of Enemies in the Dungeon
+ * TODO: At least one of each type of Enemy should spawn within the Dungeon
+ * TODO: Each Enemy type has their own Name, starting HP, Attack Name, and Attack Damage (See the README Table)
+ * TODO: When an Enemy attacks, 1 oe 3 message(s) should be displayed to the user informing them:
+ *       The name of the attack used, How much damage it cuased, and How much health the Wizert has left.
+ * TODO: Enemy encounters should be set manually, not by chance. (Not like Pokemon's tall grass chance encounters)
+ * TODO: You will not always engage in battle after making a move
+ * TODO: At least half of your locations (13+) shoul.d have an Enemy
+ * TODO: If you do engenge in battle in a certain location and defeat the Enemy there, then the Wizert should never have to fight in that spot again should they return to that location
+ * TODO: If the Wizert flees the area, that same Enemy is still there waiting for him to continue the fight
+ *       The Enemy's HP should be the same as it was after fleeing
+ * 
+ * TODO: Powerups should be scattered throughout the dungeon
+ * TODO: There are 2 Powerup types: a Health Potion that restores 10 HP, and a Magicka Potion that Restores 20 MP
+ * TODO: Each Powerup type has the name, description, and effect listed in the table in the README
+ * TODO: Powerup locations should be set manually, just as with Enemy locations (No tall grass Pokemon logic)
+ * TODO: The number of Powerups found in the Dungeon are at your discretion (Minimum 2, one of each type)
+ * TODO: The Wizert should Automatically consume the Powerup if it is avalible at their location
+ * TODO: A Powerup should only be avalible to be used only once at that location (Only one time use, no moving the Powerup)
+ * TODO: Once a Powerup is used, no new or replacement Powerup should be present if the WIzert backtracks to that location
+ * TODO: After consuming a Powerup, display how much HP or MP was restored, then display both the current HP and current MP of the Wizert
+ * 
+ * TODO: The Dungeon should be seperated into smaller Units
+ * TODO: Each Unit represents a location of the dungeon that the Wizert can travel to
+ * TODO: The Dungeon should be a 5x5 2D matrix of these Units for a total of 25 possible Units that the Wizert could travel to
+ * TODO: A data structure that we learned in class should be what we use to support and represent this 2D graph
+ * TODO: There should be walls surrounding the perimeter of the Dungeon that prevents the Wizert from traveling out of bounds
+ *       You do not need to place walls anywhere else in the Dungeon. You can, but it is not required
+ * TODO: Every Unit should have a description that describes the section of the Dungeon that the Wizert is in
+ * TODO: This Unit description will be printed on the Console after each move
+ *       Descriptions may be reused, but having them all be unique would be cool (A minimum of 25 descriptions would be required to do this)
+ * TODO: After the description is displayed, the Wizert could also either encounter an Enemy or a Powerup
+ *       Doing so will either iniciate an battle/combat or consume the Powerup respectively
+ * TODO: Encountering an Enemy &/or Powerup should not be by chance, these should be set up manually in the code (No Pokemon tall grass mechanics)
+ * TODO: If both an Enmey and a Powerup appear in the same location at the same time, have the Wizert fight off the Enemy first before consuming the Powerup
+ * TODO: Upon startup, determine both the starting position of the Wizert and the Dungeon Exit location randomly
+ *       These locations should not be displayed to the player, but they should still be saved somewhere for your program to remember them for determining other logic
+ * TODO: When the Wizert reaches the exit, stop the Game and inform the player "You have won", then offer to let them play again
+ * 
+ * TODO: Practice good input validation when developing this application (See Input Validation HW)
+ * TODO: When asking for user input, give the user options to select from (See the example in the README)
+ * TODO: Validate that the user entered an expected number to the console
+ * TODO: Ensure all of these steps for both when the Wizert is in battle and for when they are moving throughout the Dungeon
  * 
  * 
- * Game Objects
- * DONE: Create the GameObject Class. All of the Enemies, Powerups, and the Wizert will be a child class of this GameObject class.
- * DONE: Track the Objects' locations within the Dungeon
- * 
- * 
- * DONE: Create the GameUnit Subclass from the GameObject Class
- * DONE: Define the Health Point (HP) and MaxHP Variables
- * DONE: Define the AdjustHealth Function to implament taking damage and healing
- * DONE: Whenever a Unit's health is adjusted, display what the difference is and how much remaining health it has left
- *      ^Do this within the actual AdjustHP and AdjustMP functions, maybe ...^
- * 
- * 
- * DONE: Create the Wizert Subclass, the player controlled character, from the GameUnit Class
- * DONE: Implement the Wizert's starting Health Points (100 HP) and Magicka Points (200 MP)
- * DONE: Create the Wizert's movement options (North, South, East, West) EXCEPT for when there is a wall in the way
- * DONE: Create the Wizert's combat options (Fireball, Heal, or Flee) EXCEPT for when the Wizert does not have enough MP to use certain certain actions
- *      ^I think it would be a cool idea to also allow the user to heal themselves during their movement outside of an encounter^
- * DONE: Implement the Flee Action (B/c it is supposed to be a random chance of either succeding or failing to flee, I'll just make it a 50/50 chance)
- *      ^A successful Flee should bring the Wizert back into the direction from which they came from, aka always going back to the same room that it used to enter^
- * DONE: Implement providing a description of what happens whenever the user chooses an action to perform
- * DONE: Whenever the Wizert expends any MP, display how much MP was used
- * DONE: When the Wizert's HP becomes 0 or less, the player is defeated and it is game over
- * 
- * 
- * DONE: Create the Enemy Subclass from the GameUnit Class
- * DONE: Create the various enemy Subclasses from the Enemy Class
- * DONE: When an enemy attacks, show a message that says the name of the attack, how much damage it did, and how much HP the Wizert has left
- * DONE: Once an enemy's HP hits 0 or less, the enemy is defeated and should be despawned from the room
- * DONE: If the Wizert flees the room and then returns, the same enemy should still be there and should have the same amount of health (no healing enemies)
- * 
- * 
- * DONE: Create the Powerup Subclass from the GameObject Class
- * DONE: Create the various powerup Subclasses from the Powerup Class
- * DONE: If the Wizert enters a room with a Powerup, then they immedeately consume the Powerup with a message displayed of the effects.
- *  ^If the Wizert encounters a Powerup while their respective HP or MP is already at max, then the Powerup is not consumed and will remain in that room until consumed^
- *  ^Also if there is an Enemy in the same room as a Powerup, then the Powerup is not consumed until the Enemy in that room is defeated.^
- * DONE: Once a Powerup is used, it needs to be despawned from the Dungeon with a message displaying how much HP or MP was restored and the Wizert's new current HP or MP
- * 
- * Game Logic
- * DONE: When the player is "Game Overed," ask if they would like to play again. If so, restart the program. If not, exit program.
- * DONE: If the Wizert enters a room with both an Enemy and a Powerup, then the Powerup is not consumed until the Enemy in that room is defeated
- * 
- * User Input
- * DONE: Whenever we need to ask for user input, we will display a list of possible options, each with a corrisponding number next to the option
- * DONE: User will enter a single diget number (1-9) to select which action option they whish to do.
- * DONE: Will display all possible options at each appropreate times, but if the option is not possible then we will give a reason why.
- *  ^For example, if the Wizert is all the way north any they attempt to go north, we will just say that they ran into a wall or something^
- * DONE: If the user enters an invalid input, then we will tell them to enter a valid input and to try again
- * 
- * ???Who attacks first each combat? The Wizert? The Enemies? Is it random? I want to make it a 50/50 if an enemy gets an attack off first before the Wizert,
- * BUT after looking at the example that Prof. Wu provided it appears as though the Wizert will always move before the enemies when he first encounters them.
- * 
- * Make sure to use:
- * 
- * DONE: Classes
- * DONE: Inheritance
- * DONE: Loops
- * DONE: Various and Appropriate Data Types
- * DONE: Data Structures
- * DONE: Input Validation
- * DONE: Instatiating your Classes into Objects
- * DONE: Conditional Statements (IF and/or Switch)
- * DONE: Appropriate Opperators
- * 
+ * Make Sure To Use:
+ * TODO: Various and Appropriate Data Types
+ * TODO: Data Structures
+ * TODO: Input Validation
  * TODO: Any External Libraries
+ * TODO: Creating Classes
+ * TODO: Instatiating your Classes into Objects
+ * TODO: Appropriate Opperators
+ * TODO: Conditional Statements (IF and/or Switch)
+ * TODO: Loops
+ * TODO: Inheritance
  * TODO: Encapsulation (Each Class is its own file & Do not put all of the funtionality into a single file)
  * 
  * 
- * Remember These Important Things:
- * -This NEEDS to be a text-based adventure game, no fansey graphical interfaces. (booo!)
+ * Refactorings I want to make:
+ *  - I want to change the Dungeon so that it is a 2D matrix of Room Objects, not a 2D matrix of List<GameObject> collections. This should be somewhat simple
+ *      because each Room Object should only ever have 0 to 1 Wizert Objects, 0 to 1 Enemy Objects, and 0 to 1 Powerup Objects.
+ *      Doing this should also allow me to do what I've wanted in the beginning which was have our Wizert actually be IN the Dungeon, like within the Dungeon Object!
+ *      
+ *  - I wanna adjust the dialogue for the Enemy encounters. Right now it repeats "You have encountered a [EnemyName]" each time when it should probably only say that
+ *      for the first round of combat while any rounds of combat after the first should say something like, "You're still battling the [EnemyName]".
+ * 
+ *  - Depending on how my refactoring goes, I may or may not get rid of my "Garbage Collection" code since if I'm going to try to store everything in my Room Objects
+ *      now rather than in a List in the Dungeon, then I should be able to edit the Room Objects more safely than deleting an entire object from a list while that
+ *      list is in the middle of a for/forEach loop.
+ * 
+ *  - I want to add more comments to my code, basically moving the comments that I have below as well as some of the lines from the above checklist to where these 
+ *      described comments happen in my code. I know the Prof. said that sometimes comments can be bad since we hope that code can just describe what it is doing itself, 
+ *      but if I'm not going to documente this code then I want some more descriptions at what I am looking at.
+ * 
+ *  - If it is possible to put all of the sections that ask for user input together into one function, that would be great. 
+ *      However, I still do not know how I would go about trying to achieve this.
+ * 
+ *  - Adjust the GameUnit class and all of its children to use the "Unit" variables rather than the Enemy or Wizert variables.
+ *      This includes putting the name, hp, maxHp, attackName, attackDamage, attackDescription etc all into GameUnit and not seperated between Wizert or Enemy.
+ * 
+ *  - Delete the HealthPotion.cs and MagickaPotion.cs files. I've already been able to achieve their funtionality by using an enum within the Powerup class 
+ *      so they are not needed anymore.
+ * 
+ *  - Go through and delete any commented out code. I kept most of these since I wasn't sure if I needed to go back to using them. 
+ *      But now I know that I don't need them so they are unnessary and get in the way of actual code and actual comments.
+ * 
+ *  - When giving out options to the player, it might be a cool and good idea to ONLY display the options that the player can actually do.
+ *      For example, if the Wizert is already all the way North as possible, then we could choose to not display "Go North" as an option to them.
+ *      Doing this though may get a bit complicated, so I say it is fine if I don't get to this one.
+ * 
+ *  - It would also be nice to encapsulate some of the functionality of this Program.cs file into some functions within ProgramHelper.cs, espacially for any times 
+ *      I find repeated blocks of code or chunks of code that take up a lot of vertical space like spawning the dungeon. 
+ * 
+ * 
+ * Additional Questions or Confusions that I have that I need to solve for myself
+ * ??? Who attacks first each combat? The Wizert? The Enemies? Is it random? I want to make it a 50/50 if an enemy gets an attack off first before the Wizert,
+ *     but after looking at the example that Prof. Wu provided it appears as though the Wizert will always move before the enemies when he first encounters them.
+ *     However, that was just an example and I cannot find an answer to this specific question, so I'll do it my way.
+ * 
+ * ??? Would the Wizert not just be able to heal themselves outside of combat? That just seems more like a common sense question more than anything else.
+ *     Even though the provided example does not show this to be an option, I would like to do so for my version as a sort of Quality of Life change.
+ * 
+ * ??? I just noticed that the requirements do not actually specify what to do with a Powerup if the Wizert is already full on either his HP or MP when it finds one.
+ *     The requirements just say that he consumes the Powerup and that's it. To me, if he's at full health and finds a health potion, then he shouldn't just waste it,
+ *     he should save it for later for when he would need it then. Of course, this means that he just leaves the potion there and does not take it with him, 
+ *     but doing that would directly go against the design requirements layed out for us, so I'll just settle for having him leave the potions when he is already full.
+ * 
+ * ??? How should we handle players giving us weird or invalid input during battle? Should the Game be nice and just repeatidly ask for input until it gets a valid response?
+ *      Or should the Game be mean by skipping the Wizert's turn and then let the Enemy have it's turn and let it hit the player? In order to answer this question, 
+ *      normally I would default back to week 10's lesson about user input and validation which would be to go with the nice option, keep asking until the user gets it right.
+ *      That said, I do kinda want to do it the mean way, but I think it would be better to do it the nice way just in case that is a requirement and I missed it.
  * 
  */
 
@@ -131,26 +180,6 @@ using static CIS129FinalProject.Wizert;
  * 
  */
 
-/* This is another way to make the Dungeon, but I like the other version I made more so I'm using that one instead.
-List<GameObject>[][] theDungeon2 = new List<GameObject>[5][]
-{
-    new List<GameObject>[5]{
-        new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }
-    },
-    new List<GameObject>[5]{
-        new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }
-    },
-    new List<GameObject>[5]{
-        new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }
-    },
-    new List<GameObject>[5]{
-        new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }
-    },
-    new List<GameObject>[5]{
-        new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }, new List<GameObject> { }
-    }
-};*/
-
 Random rnd = new();
 int randInt;
 string? input;
@@ -169,6 +198,10 @@ List<(int, int, GameObject)> gameObjectsToRemove = new() { };
 List<string> roomDescriptions;
 
 /* Ok, new plan for spawning everything:
+ * 
+ * PLEASE DISREGARD EVERYTHING LISTED BELOW FOR NOW!
+ * As I am refactoring and redesigning things for this project, I am for sure going to be changing how the spawning for this game works so this is probably going to change
+ * 
  * 1) Pick a random number 1, 2, 3, or 4. The chosen number will detrmine which corner the exit is spawned in. 
  *      >Spawn a room object in every space, giving them a randomly assigned description (ideally each of these would be unique)
  * 2) Spawn the Wizert in the opposite corner of the exit.
