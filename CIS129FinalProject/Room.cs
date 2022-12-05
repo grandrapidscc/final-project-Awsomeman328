@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static CIS129FinalProject.Wizert;
 
 namespace CIS129FinalProject
 {
@@ -45,17 +47,26 @@ namespace CIS129FinalProject
             }
         }
         public Wizert? GetWizert() { return wizert; }
+        public bool IsWizertHere()
+        {
+            if (wizert !=null && Wizert.ReferenceEquals(wizert.GetType(), new Wizert().GetType())) return true;
+            else return false;
+        }
         public void WizertExits() { wizert = null; }
-        public Room TransferWizertsToOtherRoom(Room otherRoom)
+        public void MoveWizertToOtherRoom(Room otherRoom)
         {
             otherRoom.WizertEnters(GetWizert());
             WizertExits();
-            return otherRoom;
         }
 
         public void SetEnemy(Enemy? enemyIn) { enemy = enemyIn; }
         public Enemy? GetEnemy() { return enemy; }
         public void SetPowerup(Powerup? powerupIn) { powerup = powerupIn; }
         public Powerup? GetPowerup() { return powerup; }
+        public bool IsPowerupNull()
+        {
+                if (powerup != null && Powerup.ReferenceEquals(powerup.GetType(), new Powerup(Powerup.PotionType.Health).GetType())) return false;
+                else return true;
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace CIS129FinalProject
     public class Powerup : GameObject
     {
         protected PotionType _potionType;
+        protected int _restoreAmount;
 
         public enum PotionType
         {
@@ -19,6 +20,8 @@ namespace CIS129FinalProject
         public Powerup(PotionType potionType)
         {
             _potionType = potionType;
+            if (_potionType == PotionType.Health) _restoreAmount = 10;
+            else _restoreAmount = 20;
         }
 
         public override void Update()
@@ -27,5 +30,6 @@ namespace CIS129FinalProject
         }
 
         public PotionType GetPotionType() { return _potionType; }
+        public int GetRestoreAmount() { return _restoreAmount; }
     }
 }

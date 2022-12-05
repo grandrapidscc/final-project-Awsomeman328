@@ -20,6 +20,7 @@ namespace CIS129FinalProject
             Exit,
             Die
         }
+        protected (int, int) previousRoom;
         protected WizertState currentState;
         protected WizertState nextState;
 
@@ -28,6 +29,8 @@ namespace CIS129FinalProject
             _maxHp = 100;
             _hp = _maxHp;
             _unitName = "Wizert";
+            _attackName = "Fireball";
+            _attackDamage = 5;
             _maxMp = 200;
             _mp = _maxMp;
             currentState = WizertState.Spawn;
@@ -48,7 +51,9 @@ namespace CIS129FinalProject
             nextState = inState;
         }
 
-        
+        public (int, int) GetPreviousRoom() { return previousRoom; }
+
+        public void SetPreviousRoom((int, int) newPrevious) { previousRoom = newPrevious; }
 
         public int GetMP() { return _mp; }
         public int GetMaxMP() { return _maxMp; }
@@ -60,18 +65,56 @@ namespace CIS129FinalProject
             if (_mp < 0) _mp = 0;
             if (amount > 0)
             {
-                Console.WriteLine($"The {GetUnitName()} has restored {amount} MP.");
+                Console.Write($"You have restored {amount} MP. ");
             }
             else if (amount < 0)
             {
-                Console.WriteLine($"The {GetUnitName()} has expended {-amount} MP.");
+                Console.Write($"You have expended {-amount} MP. ");
             }
             else
             {
-                Console.WriteLine("... It appears to not have had any effect.");
+                Console.Write("... It appears to not have had any effect. ");
 
             }
-            Console.WriteLine($"The {GetUnitName()}'s current MP is now {_mp} out of {_maxMp}");
+            Console.WriteLine($"Your current MP is now {_mp} out of {_maxMp}");
+        }
+
+        public bool CanCastFireball()
+        {
+            // Still need to check if the wizert has enough MP to be able to cast any of its spell options, ...
+            if (GetMP() >= 3)
+            {
+                Console.Write("You cast a Fireball that burns the enemy. ");
+                AdjustMP(-3);
+                return true;
+            }
+            else
+            {
+                Console.Write("You try to cast a Fireball, but find that you do not have enough MP to finish casting the spell. ");
+                Console.WriteLine($"You currently have {GetMP()} MP left.");
+                return false;
+            }
+        }
+
+        public void CastHealSpell()
+        {
+            if (GetHP() >= GetMaxHP())
+            {
+                Console.Write("You think about healing yourself, but realize that you are currently at full HP. ");
+                Console.WriteLine($"You currently have {GetHP()} HP and {GetMP()} MP left.");
+            }
+            else if (GetMP() >= 5)
+            {
+                Console.Write("You cast a Heal spell to restore your wounds. ");
+                AdjustMP(-5);
+                AdjustHP(3);
+                Console.WriteLine($"You now have {GetHP()} HP and {GetMP()} MP.");
+            }
+            else
+            {
+                Console.Write("You try to cast a heal, but find that you do not have enough MP to finish casting the spell. ");
+                Console.WriteLine($"You currently have {GetMP()} MP left.");
+            }
         }
     }
 }

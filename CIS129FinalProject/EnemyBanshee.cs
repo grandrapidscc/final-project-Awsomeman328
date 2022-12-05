@@ -10,8 +10,7 @@ namespace CIS129FinalProject
     {
         public EnemyBanshee()
         {
-            _enemyName = "Banshee";
-            _unitName = _enemyName;
+            _unitName = "Banshee";
             _maxHp = 8;
             _hp = _maxHp;
             _attackName = "Screech";

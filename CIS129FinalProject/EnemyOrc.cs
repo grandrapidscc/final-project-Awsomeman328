@@ -10,8 +10,7 @@ namespace CIS129FinalProject
     {
         public EnemyOrc()
         {
-            _enemyName = "Orc";
-            _unitName = _enemyName;
+            _unitName = "Orc";
             _maxHp = 5;
             _hp = _maxHp;
             _attackName = "Cleave";
