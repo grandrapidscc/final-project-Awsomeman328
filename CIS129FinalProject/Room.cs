@@ -46,7 +46,7 @@ namespace CIS129FinalProject
                 Console.WriteLine("A fatal error has occured, tried to put a Wizert in a room that already has a Wizert, ...");
             }
         }
-        public Wizert? GetWizert() { return wizert; }
+        public Wizert? GetWizert() { return wizert!; }
         public bool IsWizertHere()
         {
             if (wizert !=null && Wizert.ReferenceEquals(wizert.GetType(), new Wizert().GetType())) return true;
@@ -55,14 +55,14 @@ namespace CIS129FinalProject
         public void WizertExits() { wizert = null; }
         public void MoveWizertToOtherRoom(Room otherRoom)
         {
-            otherRoom.WizertEnters(GetWizert());
+            otherRoom.WizertEnters(GetWizert()!);
             WizertExits();
         }
 
         public void SetEnemy(Enemy? enemyIn) { enemy = enemyIn; }
-        public Enemy? GetEnemy() { return enemy; }
+        public Enemy? GetEnemy() { return enemy!; }
         public void SetPowerup(Powerup? powerupIn) { powerup = powerupIn; }
-        public Powerup? GetPowerup() { return powerup; }
+        public Powerup? GetPowerup() { return powerup!; }
         public bool IsPowerupNull()
         {
                 if (powerup != null && Powerup.ReferenceEquals(powerup.GetType(), new Powerup(Powerup.PotionType.Health).GetType())) return false;

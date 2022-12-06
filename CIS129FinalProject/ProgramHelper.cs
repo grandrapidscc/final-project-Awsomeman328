@@ -57,7 +57,7 @@
                     new Room(false), new Room(false), new Room(false), new Room(false), new Room(false)
                 }
             };
-            List<string> roomDescriptions = new List<string>
+            List<string> roomDescriptions = new()
             {
                 "You are in a room illuminated by torches.  It reeks of orc, though you do not see any nearby.",
                 "Withered corpses are nailed to the corridor walls.",
@@ -108,7 +108,7 @@
             // Spawn the Wizert in a random Room
             randInt1 = rnd.Next(4);
             randInt2 = rnd.Next(4);
-            theDungeon[randInt1, randInt1].WizertEnters(new Wizert());
+            theDungeon[randInt1, randInt2].WizertEnters(new Wizert());
 
             // Crate the Exit in a DIFFERENT random Room
             isExitSpawned = false;
@@ -182,9 +182,9 @@
                     // Count the number of each type of enemy there is in the Dungeon
                     if (enemyRoom.GetEnemy() != null)
                     {
-                        if (EnemyGoblin.ReferenceEquals(enemyRoom.GetEnemy().GetType(), new EnemyGoblin().GetType())) numGoblins++;
-                        if (EnemyOrc.ReferenceEquals(enemyRoom.GetEnemy().GetType(), new EnemyOrc().GetType())) numOrcs++;
-                        if (EnemyBanshee.ReferenceEquals(enemyRoom.GetEnemy().GetType(), new EnemyBanshee().GetType())) numBanshees++;
+                        if (EnemyGoblin.ReferenceEquals(enemyRoom.GetEnemy()!.GetType(), new EnemyGoblin().GetType())) numGoblins++;
+                        if (EnemyOrc.ReferenceEquals(enemyRoom.GetEnemy()!.GetType(), new EnemyOrc().GetType())) numOrcs++;
+                        if (EnemyBanshee.ReferenceEquals(enemyRoom.GetEnemy()!.GetType(), new EnemyBanshee().GetType())) numBanshees++;
                     }
                 }
                 // If a certain type of Enemy has not been spawned into the Dungeon, then we need to spawn at least one of that type!
@@ -195,7 +195,7 @@
                     randInt1 = rnd.Next(4);
                     randInt2 = rnd.Next(4);
                     if (!theDungeon[randInt1, randInt2].IsWizertHere() && theDungeon[randInt1, randInt2].GetEnemy() != null &&
-                        !EnemyGoblin.ReferenceEquals(theDungeon[randInt1, randInt2].GetEnemy().GetType(), new EnemyGoblin().GetType()))
+                        !EnemyGoblin.ReferenceEquals(theDungeon[randInt1, randInt2].GetEnemy()!.GetType(), new EnemyGoblin().GetType()))
                     {
                         theDungeon[randInt1, randInt2].SetEnemy(new EnemyGoblin());
                         numGoblins++;
@@ -206,7 +206,7 @@
                     randInt1 = rnd.Next(4);
                     randInt2 = rnd.Next(4);
                     if (!theDungeon[randInt1, randInt2].IsWizertHere() && theDungeon[randInt1, randInt2].GetEnemy() != null &&
-                        !EnemyGoblin.ReferenceEquals(theDungeon[randInt1, randInt2].GetEnemy().GetType(), new EnemyOrc().GetType()))
+                        !EnemyGoblin.ReferenceEquals(theDungeon[randInt1, randInt2].GetEnemy()!.GetType(), new EnemyOrc().GetType()))
                     {
                         theDungeon[randInt1, randInt2].SetEnemy(new EnemyOrc());
                         numOrcs++;
@@ -217,7 +217,7 @@
                     randInt1 = rnd.Next(4);
                     randInt2 = rnd.Next(4);
                     if (!theDungeon[randInt1, randInt2].IsWizertHere() && theDungeon[randInt1, randInt2].GetEnemy() != null &&
-                        !EnemyGoblin.ReferenceEquals(theDungeon[randInt1, randInt2].GetEnemy().GetType(), new EnemyBanshee().GetType()))
+                        !EnemyGoblin.ReferenceEquals(theDungeon[randInt1, randInt2].GetEnemy()!.GetType(), new EnemyBanshee().GetType()))
                     {
                         theDungeon[randInt1, randInt2].SetEnemy(new EnemyBanshee());
                         numBanshees++;

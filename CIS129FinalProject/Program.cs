@@ -200,12 +200,12 @@ do
             {
                 if (theDungeon[x, y].IsWizertHere())
                 {
-                    theDungeon[x, y].GetWizert().Update();
-                    switch (theDungeon[x, y].GetWizert().GetState())
+                    theDungeon[x, y].GetWizert()!.Update();
+                    switch (theDungeon[x, y].GetWizert()!.GetState())
                     {
                         case Wizert.WizertState.Spawn:
                             Console.WriteLine("You, the Wizert, have found yourself within the Dungeon yet again, ...");
-                            theDungeon[x, y].GetWizert().SetNextState(Wizert.WizertState.Search);
+                            theDungeon[x, y].GetWizert()!.SetNextState(Wizert.WizertState.Search);
                             break;
 
                         //- Once in the Move state, the game will ask the player which direction they want to move, North, South, East, or West.
@@ -240,8 +240,8 @@ do
                                                 Console.WriteLine("and you go through the door.");
 
                                                 //> After moving, the Wizert will start searching this new room.
-                                                theDungeon[x, y].GetWizert().SetNextState(WizertState.Search);
-                                                theDungeon[x, y].GetWizert().SetPreviousRoom((x, y));
+                                                theDungeon[x, y].GetWizert()!.SetNextState(WizertState.Search);
+                                                theDungeon[x, y].GetWizert()!.SetPreviousRoom((x, y));
                                                 theDungeon[x, y].MoveWizertToOtherRoom(theDungeon[x - 1, y]);
                                             }
                                             break;
@@ -257,8 +257,8 @@ do
                                                 Console.WriteLine("and you go through the door.");
 
                                                 //> After moving, the Wizert will start searching this new room.
-                                                theDungeon[x, y].GetWizert().SetNextState(WizertState.Search);
-                                                theDungeon[x, y].GetWizert().SetPreviousRoom((x, y));
+                                                theDungeon[x, y].GetWizert()!.SetNextState(WizertState.Search);
+                                                theDungeon[x, y].GetWizert()!.SetPreviousRoom((x, y));
                                                 theDungeon[x, y].MoveWizertToOtherRoom(theDungeon[x + 1, y]);
                                             }
                                             break;
@@ -274,8 +274,8 @@ do
                                                 Console.WriteLine("and you go through the door.");
 
                                                 //> After moving, the Wizert will start searching this new room.
-                                                theDungeon[x, y].GetWizert().SetNextState(WizertState.Search);
-                                                theDungeon[x, y].GetWizert().SetPreviousRoom((x, y));
+                                                theDungeon[x, y].GetWizert()!.SetNextState(WizertState.Search);
+                                                theDungeon[x, y].GetWizert()!.SetPreviousRoom((x, y));
                                                 theDungeon[x, y].MoveWizertToOtherRoom(theDungeon[x, y + 1]);
                                             }
                                             break;
@@ -291,15 +291,15 @@ do
                                                 Console.WriteLine("and you go through the door.");
 
                                                 //> After moving, the Wizert will start searching this new room.
-                                                theDungeon[x, y].GetWizert().SetNextState(WizertState.Search);
-                                                theDungeon[x, y].GetWizert().SetPreviousRoom((x, y));
+                                                theDungeon[x, y].GetWizert()!.SetNextState(WizertState.Search);
+                                                theDungeon[x, y].GetWizert()!.SetPreviousRoom((x, y));
                                                 theDungeon[x, y].MoveWizertToOtherRoom(theDungeon[x, y - 1]);
                                             }
                                             break;
 
                                         //> Alternatively to moving, the player may also opt to not move for now and to heal themselves.
                                         case "5":
-                                            theDungeon[x, y].GetWizert().CastHealSpell();
+                                            theDungeon[x, y].GetWizert()!.CastHealSpell();
                                             break;
 
                                         default:
@@ -318,22 +318,22 @@ do
 
                             //- Next in its search, the Game will report to the player if there is a Powerup, an Exit, &/or an Enemy in the room.
                             //- If none of these things are present, the Wizert will go to its Move state
-                            theDungeon[x, y].GetWizert().SetNextState(Wizert.WizertState.Move);
+                            theDungeon[x, y].GetWizert()!.SetNextState(Wizert.WizertState.Move);
 
                             //- If any of these things are found, the Wizert will address each of them in reverse order.
                             if (theDungeon[x, y].GetPowerup() != null)
                             {
-                                if (Powerup.ReferenceEquals(theDungeon[x, y].GetPowerup().GetType(), new Powerup(Powerup.PotionType.Health).GetType()))
+                                if (Powerup.ReferenceEquals(theDungeon[x, y].GetPowerup()!.GetType(), new Powerup(Powerup.PotionType.Health).GetType()))
                                 {
                                     Console.WriteLine("While surveying the room, you notice a potion off in the corner.");
-                                    theDungeon[x, y].GetWizert().SetNextState(Wizert.WizertState.UsePowerup);
+                                    theDungeon[x, y].GetWizert()!.SetNextState(Wizert.WizertState.UsePowerup);
                                 }
                             }
 
                             if (theDungeon[x, y].IsExit())
                             {
                                 Console.WriteLine("And then you see it! The exit to this dungeon!");
-                                theDungeon[x, y].GetWizert().SetNextState(Wizert.WizertState.Exit);
+                                theDungeon[x, y].GetWizert()!.SetNextState(Wizert.WizertState.Exit);
                             }
                             else
                             {
@@ -342,10 +342,10 @@ do
 
                             if (theDungeon[x, y].GetEnemy() != null)
                             {
-                                if (ProgramHelper.IsObjectAnEnemy(theDungeon[x, y].GetEnemy()))
+                                if (ProgramHelper.IsObjectAnEnemy(theDungeon[x, y].GetEnemy()!))
                                 {
                                     Console.WriteLine("But suddenly, you see something move.");
-                                    theDungeon[x, y].GetWizert().SetNextState(Wizert.WizertState.Battle);
+                                    theDungeon[x, y].GetWizert()!.SetNextState(Wizert.WizertState.Battle);
                                     isFirstRoundOfCombat = true;
                                 }
                             }
@@ -355,18 +355,18 @@ do
                         case Wizert.WizertState.Battle:
                             if (theDungeon[x, y].GetEnemy() != null)
                             {
-                                if (ProgramHelper.IsObjectAnEnemy(theDungeon[x, y].GetEnemy()))
+                                if (ProgramHelper.IsObjectAnEnemy(theDungeon[x, y].GetEnemy()!))
                                 {
                                     // 
-                                    if (theDungeon[x, y].GetEnemy().GetHasMet())
+                                    if (theDungeon[x, y].GetEnemy()!.GetHasMet())
                                     {
-                                        Console.WriteLine($"You continue your battle against the {theDungeon[x, y].GetEnemy().GetUnitName()}.");
+                                        Console.WriteLine($"You continue your battle against the {theDungeon[x, y].GetEnemy()!.GetUnitName()}.");
                                     }
                                     else
                                     {
                                         // The "GetAOrAn() is for when an Enemy Name starts with a vowel letter, like with "Orc".
-                                        Console.WriteLine($"You have encountered {theDungeon[x, y].GetEnemy().GetAOrAn()} {theDungeon[x, y].GetEnemy().GetUnitName()}.");
-                                        theDungeon[x, y].GetEnemy().SetHasMet(true);
+                                        Console.WriteLine($"You have encountered {theDungeon[x, y].GetEnemy()!.GetAOrAn()} {theDungeon[x, y].GetEnemy()!.GetUnitName()}.");
+                                        theDungeon[x, y].GetEnemy()!.SetHasMet(true);
                                     }
 
                                     // There is a 50% chance that either the Enemy will go first or the Wizert.
@@ -376,22 +376,22 @@ do
                                         if (randInt1 == 0)
                                         {
                                             Console.WriteLine("The enemy managed to suprise you and was able to attack you before you could react!");
-                                            Console.WriteLine($"The {theDungeon[x, y].GetEnemy().GetUnitName()} uses it's {theDungeon[x, y].GetEnemy().GetAttackName()} attack. ");
-                                            theDungeon[x, y].GetWizert().AdjustHP(-theDungeon[x, y].GetEnemy().GetAttackDamage());
+                                            Console.WriteLine($"The {theDungeon[x, y].GetEnemy()!.GetUnitName()} uses it's {theDungeon[x, y].GetEnemy()!.GetAttackName()} attack. ");
+                                            theDungeon[x, y].GetWizert()!.AdjustHP(-theDungeon[x, y].GetEnemy()!.GetAttackDamage());
                                         }
                                     }
                                     isFirstRoundOfCombat = false;
 
                                     // We need to check if the Wizert has died from the Enemy's most recent attack!
                                     //> If the Wizert's HP is brought down to 0 or less, then the Wizert Dies.
-                                    if (theDungeon[x, y].GetWizert().GetHP() <= 0)
+                                    if (theDungeon[x, y].GetWizert()!.GetHP() <= 0)
                                     {
                                         Console.WriteLine("You have ran out of HP.");
-                                        theDungeon[x, y].GetWizert().SetNextState(WizertState.Die);
+                                        theDungeon[x, y].GetWizert()!.SetNextState(WizertState.Die);
                                     }
                                     else
                                     {
-                                        Console.WriteLine($"It's current HP is {theDungeon[x, y].GetEnemy().GetHP()}.");
+                                        Console.WriteLine($"It's current HP is {theDungeon[x, y].GetEnemy()!.GetHP()}.");
                                         //> The player gets the choice of either attacking that Enemy, Healing themselves, or trying to run away.
                                         Console.WriteLine("Press..." +
                                             "\n1.\tTo Attack with a Fireball\r" +
@@ -413,48 +413,48 @@ do
                                                     //> If they choose to Attack, then the Wizert expends some MP and damages the Enemy.
                                                     case "1":
                                                         // Still need to check if the wizert has enough MP to be able to cast any of its spell options, ...
-                                                        if (theDungeon[x, y].GetWizert().CanCastFireball()) theDungeon[x, y].GetEnemy().AdjustHP(-5);
+                                                        if (theDungeon[x, y].GetWizert()!.CanCastFireball()) theDungeon[x, y].GetEnemy()!.AdjustHP(-5);
 
                                                         // After attacking the Enemy, we need to check its current HP.
-                                                        if (theDungeon[x, y].GetEnemy().GetHP() <= 0)
+                                                        if (theDungeon[x, y].GetEnemy()!.GetHP() <= 0)
                                                         {
                                                             //> If the Enemy's HP is set to 0 or less, the Enemy dies and is deleted.
-                                                            Console.WriteLine($"The {theDungeon[x, y].GetEnemy().GetUnitName()} burns to a crisp.");
+                                                            Console.WriteLine($"The {theDungeon[x, y].GetEnemy()!.GetUnitName()} burns to a crisp.");
                                                             theDungeon[x, y].SetEnemy(null);
 
                                                             //>Once the Enemy is deleted, the Wizert will go back to searching the room.
-                                                            theDungeon[x, y].GetWizert().SetNextState(WizertState.Search);
+                                                            theDungeon[x, y].GetWizert()!.SetNextState(WizertState.Search);
                                                         }
                                                         else
                                                         {
                                                             //> If after this choice the Wizert is still in the same room with an Enemy still remaining,
                                                             //  then the Enemy attacks the Wizert and damages them.
-                                                            Console.WriteLine($"The {theDungeon[x, y].GetEnemy().GetUnitName()} uses it's {theDungeon[x, y].GetEnemy().GetAttackName()} attack. ");
-                                                            theDungeon[x, y].GetWizert().AdjustHP(-theDungeon[x, y].GetEnemy().GetAttackDamage());
+                                                            Console.WriteLine($"The {theDungeon[x, y].GetEnemy()!.GetUnitName()} uses it's {theDungeon[x, y].GetEnemy()!.GetAttackName()} attack. ");
+                                                            theDungeon[x, y].GetWizert()!.AdjustHP(-theDungeon[x, y].GetEnemy()!.GetAttackDamage());
                                                         }
 
                                                         //> If the Wizert's HP is brought down to 0 or less, then the Wizert Dies.
-                                                        if (theDungeon[x, y].GetWizert().GetHP() <= 0)
+                                                        if (theDungeon[x, y].GetWizert()!.GetHP() <= 0)
                                                         {
                                                             Console.WriteLine("You have ran out of HP.");
-                                                            theDungeon[x, y].GetWizert().SetNextState(WizertState.Die);
+                                                            theDungeon[x, y].GetWizert()!.SetNextState(WizertState.Die);
                                                         }
                                                         break;
 
                                                     //> If they choose to Heal, then the Wizert expends some MP and restores some of the Wizert's HP.
                                                     case "2":
-                                                        theDungeon[x, y].GetWizert().CastHealSpell();
+                                                        theDungeon[x, y].GetWizert()!.CastHealSpell();
 
                                                         //> If after this choice the Wizert is still in the same room with an Enemy still remaining,
                                                         //  then the Enemy attacks the Wizert and damages them.
-                                                        Console.WriteLine($"The {theDungeon[x, y].GetEnemy().GetUnitName()} uses it's {theDungeon[x, y].GetEnemy().GetAttackName()} attack. ");
-                                                        theDungeon[x, y].GetWizert().AdjustHP(-theDungeon[x, y].GetEnemy().GetAttackDamage());
+                                                        Console.WriteLine($"The {theDungeon[x, y].GetEnemy()!.GetUnitName()} uses it's {theDungeon[x, y].GetEnemy()!.GetAttackName()} attack. ");
+                                                        theDungeon[x, y].GetWizert()!.AdjustHP(-theDungeon[x, y].GetEnemy()!.GetAttackDamage());
 
                                                         //> If the Wizert's HP is brought down to 0 or less, then the Wizert Dies.
-                                                        if (theDungeon[x, y].GetWizert().GetHP() <= 0)
+                                                        if (theDungeon[x, y].GetWizert()!.GetHP() <= 0)
                                                         {
                                                             Console.WriteLine("You have ran out of HP.");
-                                                            theDungeon[x, y].GetWizert().SetNextState(WizertState.Die);
+                                                            theDungeon[x, y].GetWizert()!.SetNextState(WizertState.Die);
                                                         }
                                                         break;
 
@@ -470,14 +470,14 @@ do
 
                                                             //> If after this choice the Wizert is still in the same room with an Enemy still remaining,
                                                             //  then the Enemy attacks the Wizert and damages them.
-                                                            Console.WriteLine($"The {theDungeon[x, y].GetEnemy().GetUnitName()} uses it's {theDungeon[x, y].GetEnemy().GetAttackName()} attack. ");
-                                                            theDungeon[x, y].GetWizert().AdjustHP(-theDungeon[x, y].GetEnemy().GetAttackDamage());
+                                                            Console.WriteLine($"The {theDungeon[x, y].GetEnemy()!.GetUnitName()} uses it's {theDungeon[x, y].GetEnemy()!.GetAttackName()} attack. ");
+                                                            theDungeon[x, y].GetWizert()!.AdjustHP(-theDungeon[x, y].GetEnemy()!.GetAttackDamage());
 
                                                             //> If the Wizert's HP is brought down to 0 or less, then the Wizert Dies.
-                                                            if (theDungeon[x, y].GetWizert().GetHP() <= 0)
+                                                            if (theDungeon[x, y].GetWizert()!.GetHP() <= 0)
                                                             {
                                                                 Console.WriteLine("You have ran out of HP.");
-                                                                theDungeon[x, y].GetWizert().SetNextState(WizertState.Die);
+                                                                theDungeon[x, y].GetWizert()!.SetNextState(WizertState.Die);
                                                             }
                                                         }
                                                         else
@@ -487,9 +487,9 @@ do
                                                             Console.WriteLine("You were able to return back to the room that you were previously in.");
 
                                                             // Move back to your previous location, ...
-                                                            theDungeon[x, y].GetWizert().SetNextState(WizertState.Search);
-                                                            (int, int) _temp = theDungeon[x, y].GetWizert().GetPreviousRoom();
-                                                            theDungeon[x, y].GetWizert().SetPreviousRoom((x, y));
+                                                            theDungeon[x, y].GetWizert()!.SetNextState(WizertState.Search);
+                                                            (int, int) _temp = theDungeon[x, y].GetWizert()!.GetPreviousRoom();
+                                                            theDungeon[x, y].GetWizert()!.SetPreviousRoom((x, y));
                                                             theDungeon[x, y].MoveWizertToOtherRoom(theDungeon[_temp.Item1, _temp.Item2]);
                                                         }
                                                         break;
@@ -509,23 +509,23 @@ do
                         case Wizert.WizertState.UsePowerup:
                             if (theDungeon[x, y].GetPowerup() != null)
                             {
-                                if (Powerup.ReferenceEquals(theDungeon[x, y].GetPowerup().GetType(), new Powerup(Powerup.PotionType.Health).GetType()))
+                                if (Powerup.ReferenceEquals(theDungeon[x, y].GetPowerup()!.GetType(), new Powerup(Powerup.PotionType.Health).GetType()))
                                 {
                                     Console.WriteLine("You look closer to examine the potion.");
-                                    if (theDungeon[x, y].GetPowerup().GetPotionType() == Powerup.PotionType.Health)
+                                    if (theDungeon[x, y].GetPowerup()!.GetPotionType() == Powerup.PotionType.Health)
                                     {
                                         Console.WriteLine("Upon closer inspection it appears to be a health potion.");
 
                                         //> If the Wizert's stat for the powerup is already at its max value then it won't use the Powerup.
                                         // Otherwise, the Wizert will consume the Powerup, restoring that particular stat by a bit and deleting the Powerup.
-                                        if (theDungeon[x, y].GetWizert().GetHP() >= theDungeon[x, y].GetWizert().GetMaxHP())
+                                        if (theDungeon[x, y].GetWizert()!.GetHP() >= theDungeon[x, y].GetWizert()!.GetMaxHP())
                                         {
                                             Console.WriteLine("You choose not to take the potion now since you don't need it.");
                                         }
                                         else
                                         {
                                             Console.WriteLine("You choose to take the potion now to restore some health since you need it.");
-                                            theDungeon[x, y].GetWizert().AdjustHP(theDungeon[x, y].GetPowerup().GetRestoreAmount()); // RestoreAmount for HP is 10
+                                            theDungeon[x, y].GetWizert()!.AdjustHP(theDungeon[x, y].GetPowerup()!.GetRestoreAmount()); // RestoreAmount for HP is 10
                                             theDungeon[x, y].SetPowerup(null);
                                         }
                                     }
@@ -535,14 +535,14 @@ do
 
                                         //> If the Wizert's stat for the powerup is already at its max value then it won't use the Powerup.
                                         // Otherwise, the Wizert will consume the Powerup, restoring that particular stat by a bit and deleting the Powerup.
-                                        if (theDungeon[x, y].GetWizert().GetMP() >= theDungeon[x, y].GetWizert().GetMaxMP())
+                                        if (theDungeon[x, y].GetWizert()!.GetMP() >= theDungeon[x, y].GetWizert()!.GetMaxMP())
                                         {
                                             Console.WriteLine("You choose not to take the potion now since you don't need it.");
                                         }
                                         else
                                         {
                                             Console.WriteLine("You choose to take the potion now to restore some magicka since you need it.");
-                                            theDungeon[x, y].GetWizert().AdjustMP(theDungeon[x, y].GetPowerup().GetRestoreAmount()); // RestoreAmount for MP is 20
+                                            theDungeon[x, y].GetWizert()!.AdjustMP(theDungeon[x, y].GetPowerup()!.GetRestoreAmount()); // RestoreAmount for MP is 20
                                             theDungeon[x, y].SetPowerup(null);
                                         }
                                     }
@@ -551,7 +551,7 @@ do
 
                             //> After this, the Wizert will decide where they want to move.
                             //  Insead of having them search the room again, it is simplier to have them go straight into moving.
-                            theDungeon[x, y].GetWizert().SetNextState(WizertState.Move);
+                            theDungeon[x, y].GetWizert()!.SetNextState(WizertState.Move);
                             break;
 
                         //- If the Exit is in the room, then the Wizert Exits the Dungeon and the player wins!
