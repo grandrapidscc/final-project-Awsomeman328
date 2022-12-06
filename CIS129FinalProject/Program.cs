@@ -332,7 +332,10 @@ do
 
                             if (theDungeon[x, y].IsExit())
                             {
-                                Console.WriteLine("And then you see it! The exit to this dungeon!");
+                                Console.WriteLine("");
+                                Console.WriteLine("And then, ... you see it! The exit to this dungeon! You are almost out of here!");
+                                Console.WriteLine("You cautiously approach the exit, keeping a sharp lookout for any traps or enemies that may be hiding, ...");
+                                Console.WriteLine("");
                                 theDungeon[x, y].GetWizert()!.SetNextState(Wizert.WizertState.Exit);
                             }
                             else
